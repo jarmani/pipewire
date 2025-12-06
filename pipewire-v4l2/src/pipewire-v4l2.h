@@ -5,6 +5,10 @@
 #include <errno.h>
 #include <fcntl.h>
 
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
+typedef off_t off64_t; /* off_t is 64 bits on BSD. */
+#endif
+
 struct fops {
 	int (*openat)(int dirfd, const char *path, int oflag, mode_t mode);
 	int (*dup)(int oldfd);

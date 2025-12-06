@@ -2,6 +2,8 @@
 /* SPDX-FileCopyrightText: Copyright © 2019 Wim Taymans */
 /* SPDX-License-Identifier: MIT */
 
+#include <sys/wait.h> /* WEXITSTATUS */
+
 #include "config.h"
 
 #include <sys/wait.h>

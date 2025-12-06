@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 #
 # Doxygen input filter, which tries to fix documentation of callback
 # method macros.

@@ -882,8 +882,13 @@ static int make_announce_socket(struct sockaddr_storage *sa, socklen_t salen,
 	}
 	spa_zero(req);
 	if (ifname) {
+#ifdef SIOCGIFINDEX
 		snprintf(req.ifr_name, sizeof(req.ifr_name), "%s", ifname);
 		res = ioctl(fd, SIOCGIFINDEX, &req);
+#else
+		if ((res = if_nametoindex(ifname)) == 0)
+			res = -1;
+#endif
 	        if (res < 0)
 	                pw_log_warn("SIOCGIFINDEX %s failed: %m", ifname);
 	}

@@ -366,7 +366,11 @@ cdata.set('HAVE_OPUS', opus_dep.found())
 
 summary({'readline (for pw-cli)': readline_dep.found()}, bool_yn: true, section: 'Misc dependencies')
 cdata.set('HAVE_READLINE', readline_dep.found())
+if host_machine.system() == 'openbsd'
+ncurses_dep = cc.find_library('ncursesw', required : false)
+else
 ncurses_dep = dependency('ncursesw', required : false)
+endif
 sndfile_dep = dependency('sndfile', version : '>= 1.0.20', required : get_option('sndfile'))
 summary({'sndfile': sndfile_dep.found()}, bool_yn: true, section: 'pw-cat/pw-play/pw-dump/filter-chain')
 cdata.set('HAVE_SNDFILE', sndfile_dep.found())
@@ -488,10 +492,13 @@ endif
 
 # On FreeBSD and MidnightBSD, epoll-shim library is required for eventfd() and timerfd()
 epoll_shim_dep = (host_machine.system() == 'freebsd' or host_machine.system() == 'midnightbsd'
+    or host_machine.system() == 'openbsd'
     ? dependency('epoll-shim', required: true)
     : dependency('', required: false))
 
 libinotify_dep = (host_machine.system() == 'freebsd' or host_machine.system() == 'midnightbsd'
+# only needed if we enable alsa or v4l2
+#    or host_machine.system() == 'openbsd'
     ? dependency('libinotify', required: true)
     : dependency('', required: false))
 
@@ -547,6 +554,8 @@ check_functions = [
   ['XSetIOErrorExitHandler', '#include <X11/Xlib.h>', [], [x11_dep]],
   ['malloc_trim', '#include <malloc.h>', [], []],
   ['malloc_info', '#include <malloc.h>', [], []],
+  ['getauxval', '#include <sys/auxv.h>', [], []],
+  ['elf_aux_info', '#include <sys/auxv.h>', [], []],
 ]
 
 foreach f : check_functions

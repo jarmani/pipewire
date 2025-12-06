@@ -11,7 +11,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <poll.h>
-#if !defined(__FreeBSD__) && !defined(__MidnightBSD__)
+#if !defined(__FreeBSD__) && !defined(__MidnightBSD__) && !defined(__OpenBSD__)
 #include <alloca.h>
 #endif
 #include <errno.h>

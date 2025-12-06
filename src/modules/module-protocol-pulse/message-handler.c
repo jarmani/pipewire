@@ -6,7 +6,11 @@
 #include <stdio.h>
 
 #include <regex.h>
+#ifndef __OpenBSD__
 #include <malloc.h>
+#else
+#include <stdlib.h>
+#endif
 
 #include <spa/param/props.h>
 #include <spa/pod/builder.h>

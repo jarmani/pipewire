@@ -377,7 +377,11 @@ static struct port *find_port(struct node *node, const char *name, int descripto
 	const struct spa_fga_descriptor *d;
 	uint32_t i, n_ports, port_id = SPA_ID_INVALID;
 
+#ifndef __OpenBSD__
 	str = strdupa(name);
+#else
+	str = strdup(name);
+#endif
 	col = strchr(str, ':');
 	if (col != NULL) {
 		struct node *find;

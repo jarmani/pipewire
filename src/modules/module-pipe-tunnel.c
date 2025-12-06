@@ -3,6 +3,10 @@
 /* SPDX-FileCopyrightText: Copyright © 2022 Wim Taymans */
 /* SPDX-License-Identifier: MIT */
 
+#if defined(__OpenBSD__)
+#include <sys/uio.h>
+#endif
+
 #include "config.h"
 
 #include <string.h>

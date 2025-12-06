@@ -10,7 +10,9 @@
 #include <unistd.h>
 #include <errno.h>
 #include <time.h>
+#ifndef __OpenBSD__
 #include <malloc.h>
+#endif
 #include <limits.h>
 
 #include <spa/support/system.h>

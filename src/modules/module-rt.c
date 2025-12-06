@@ -255,6 +255,8 @@ static pid_t _gettid(void)
 	long pid;
 	thr_self(&pid);
 	return (pid_t)pid;
+#elif defined(__OpenBSD__)
+       return getthrid();
 #elif defined(__GNU__)
        mach_port_t thread = hurd_thread_self();
        return (pid_t)thread;

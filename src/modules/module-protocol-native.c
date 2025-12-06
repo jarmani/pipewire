@@ -604,6 +604,8 @@ static struct client_data *client_new(struct server *s, int fd)
 	socklen_t len;
 #if defined(__FreeBSD__) || defined(__MidnightBSD__)
 	struct xucred xucred;
+#elif defined(__OpenBSD__)
+	struct sockpeercred ucred;
 #else
 	struct ucred ucred;
 #endif
@@ -617,7 +619,7 @@ static struct client_data *client_new(struct server *s, int fd)
 	if (props == NULL)
 		goto exit;
 
-#if defined(__linux__)
+#if defined(__linux__) || defined(__OpenBSD__)
 	len = sizeof(ucred);
 	if (getsockopt(fd, SOL_SOCKET, SO_PEERCRED, &ucred, &len) < 0) {
 		pw_log_warn("server %p: no peercred: %m", s);
