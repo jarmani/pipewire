@@ -15,7 +15,11 @@
 #include <sys/socket.h>
 #include <pthread.h>
 #include <limits.h>
+#ifdef __OpenBSD__
+#include <sys/videoio.h>
+#else
 #include <linux/videodev2.h>
+#endif
 
 #include "pipewire-v4l2.h"
 
@@ -2443,7 +2447,7 @@ static int v4l2_ioctl(int fd, unsigned long int request, void *arg)
 	if ((file = find_file(fd, &flags)) == NULL)
 		return globals.old_fops.ioctl(fd, request, arg);
 
-#if defined(__FreeBSD__) || defined(__MidnightBSD__)
+#if defined(__FreeBSD__) || defined(__MidnightBSD__) || defined(__OpenBSD__)
 	if (arg == NULL && (request & IOC_DIRMASK != IOC_VOID)) {
 #else
 	if (arg == NULL && (_IOC_DIR(request) & (_IOC_WRITE | _IOC_READ))) {

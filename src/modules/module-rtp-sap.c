@@ -411,11 +411,13 @@ static int make_unix_ptp_mgmt_socket(const char *path) {
 		return -1;
 	}
 
+#ifndef __OpenBSD__
 	int val = 1;
 	if (setsockopt(fd, SOL_SOCKET, SO_PASSCRED, &val, sizeof(val)) < 0) {
 		pw_log_warn("Failed to bind PTP management socket");
 		return -1;
 	}
+#endif
 
 	spa_zero(addr);
 	addr.sun_family = AF_UNIX;
@@ -502,9 +504,9 @@ static int make_recv_socket(struct sockaddr_storage *sa, socklen_t salen,
 	spa_zero(req);
 	if (ifname) {
 		snprintf(req.ifr_name, sizeof(req.ifr_name), "%s", ifname);
-		res = ioctl(fd, SIOCGIFINDEX, &req);
+		res = pw_if_nametoindex(ifname, fd);
 	        if (res < 0)
-	                pw_log_warn("SIOCGIFINDEX %s failed: %m", ifname);
+	                pw_log_warn("pw_if_nametoindex %s failed: %m", ifname);
 	}
 	res = 0;
 	if (af == AF_INET) {

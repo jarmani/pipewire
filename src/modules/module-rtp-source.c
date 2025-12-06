@@ -506,9 +506,9 @@ static int make_socket(const struct sockaddr* sa, socklen_t salen, char *ifname,
 	spa_zero(req);
 	if (ifname) {
 		snprintf(req.ifr_name, sizeof(req.ifr_name), "%s", ifname);
-		res = ioctl(fd, SIOCGIFINDEX, &req);
+		res = pw_if_nametoindex(ifname, fd);
 	        if (res < 0)
-	                pw_log_warn("SIOCGIFINDEX %s failed: %m", ifname);
+	                pw_log_warn("pw_if_nametoindex %s failed: %m", ifname);
 	}
 	res = 0;
 	if (af == AF_INET) {

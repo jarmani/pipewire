@@ -13,7 +13,14 @@ riscv_init(struct impl *impl)
 	uint32_t flags = 0;
 
 #ifdef HAVE_SYS_AUXV_H
-	const unsigned long hwcap = getauxval(AT_HWCAP);
+	unsigned long hwcap;
+
+# if defined(HAVE_GETAUXVAL)
+	hwcap = getauxval(AT_HWCAP);
+# elif defined(HAVE_ELF_AUX_INFO)
+	if (elf_aux_info(AT_HWCAP, &hwcap, sizeof(hwcap)) != 0)
+		hwcap = 0;
+# endif
 	if (hwcap & HWCAP_RV('V'))
 		flags |= SPA_CPU_FLAG_RISCV_V;
 #endif
